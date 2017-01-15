@@ -86,7 +86,7 @@ public:
 	//! Splits a face by connecting two vertices created at the intersection with a plane and returns the new Edge.
 	Edge*	splitFace( Face* face, const ci::vec3 &planeOrigin, const ci::vec3 &planeNormal );
 	//! Splits a face by adding a vertex in its center and connecting it to all the other vertices.
-	Vertex*	splitFace( Face* face );
+	Vertex*	splitFace( Face* face, bool quads = false );
 	//! Splits a face by connecting two vertices created at the intersection with a plane and returns the new Edge.
 	void	splitFaces( const ci::Planef &plane );
 	//! Splits a face by connecting two vertices created at the intersection with a plane and returns the new Edge.

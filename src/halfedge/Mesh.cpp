@@ -534,18 +534,28 @@ Edge* Mesh::splitFace( Face* face, const ci::vec3 &planeOrigin, const ci::vec3 &
 	return nullptr;
 }
 
-Vertex* Mesh::splitFace( Face* face )
+Vertex* Mesh::splitFace( Face* face, bool quads )
 {
+	auto size = face->size();
+	auto createQuads = quads && size > 5 && size % 2 == 0;
 	// split the first vertex and put it at the center of the face
 	auto centroid = face->calculateCentroid();
 	auto vertex	= splitVertex( face->halfEdge()->vertex(), face );
 	vertex->setPosition( centroid );
-
+	
 	// connect remaining vertices to the new vertex
 	auto halfEdge = face->halfEdge()->next();
+	if( createQuads ) {
+		halfEdge = halfEdge->next();
+	}
 	while( halfEdge->next() != face->halfEdge() ) {
 		splitFace( face, vertex, halfEdge->vertex() );
-		halfEdge = halfEdge->next();
+		if( createQuads ) {
+			halfEdge = halfEdge->next()->next();
+		}
+		else {
+			halfEdge = halfEdge->next();
+		}
 	}
 
 	return vertex;
